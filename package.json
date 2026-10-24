@@ -7,8 +7,10 @@
     "node": ">=22.23.4"
   },
   "scripts": {
-    "dev": "astro dev",
+    "prebuild": "node scripts/generate-config.mjs",
     "build": "astro build",
+    "predev": "node scripts/generate-config.mjs",
+    "dev": "astro dev",
     "preview": "astro preview"
   },
   "dependencies": {

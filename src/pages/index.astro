@@ -1,0 +1,195 @@
+---
+import { getCollection } from 'astro:content';
+import { UMAMI_SCRIPT_URL, UMAMI_WEBSITE_ID } from '../site-config';
+import { url } from '../lib/base';
+
+const byOrder = (a: any, b: any) => (a.data.order ?? 0) - (b.data.order ?? 0);
+const services = (await getCollection('services')).sort(byOrder);
+const gallery = (await getCollection('gallery')).sort(byOrder);
+const reviews = (await getCollection('reviews')).sort(byOrder);
+
+// Bump on every publish so browsers don't keep an old stylesheet or script.
+const v = '1';
+const PHONE = '(717) 286-3170';
+const TEL = 'tel:+17172863170';
+const SMS = 'sms:+17172863170';
+const EMAIL = 'markdpawling@gmail.com';
+const FACEBOOK = 'https://www.facebook.com/people/Pawling-masonry-inc/100064440384288/';
+const sizeClass: Record<string, string> = { narrow: 'half', wide: 'wide' };
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Preview site: keep out of search results until this becomes the real site -->
+  <meta name="robots" content="noindex, nofollow">
+  <title>Pawling Masonry Inc | Chimneys, Stone, Brick and Concrete</title>
+  <meta name="description" content={`Pawling Masonry Inc: chimney repair and rebuilds, stone and brick work, patios, walks and steps. Call or text Mark at ${PHONE}.`}>
+  <link rel="icon" type="image/png" href={url('/images/pawlingmasonry.icon.png')}>
+  <link rel="apple-touch-icon" href={url('/images/pawlingmasonry.icon.png')}>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href={url(`/css/style.css?v=${v}`)}>
+  {UMAMI_WEBSITE_ID && UMAMI_SCRIPT_URL && (
+    <script defer src={UMAMI_SCRIPT_URL} data-website-id={UMAMI_WEBSITE_ID}></script>
+  )}
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a href="#top" class="brand"><img src={url('/images/pawlingmasonry.logo-horizontal-dark.svg')} alt="Pawling Masonry Inc" width="758" height="191"></a>
+      <nav class="nav" aria-label="Main">
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#estimate">Estimate</a>
+      </nav>
+      <a class="btn btn-brick header-call" href={TEL}>Call or text <span>{PHONE}</span></a>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Masonry &amp; concrete contractor</p>
+        <h1>Chimneys. Stone. Brick. Concrete.</h1>
+        <p class="lede">Chimney repair and rebuilds, stone and brick work, patios, walks and steps. Call or text Mark for an estimate.</p>
+        <div class="hero-actions">
+          <a class="btn btn-brick" href={TEL}>Call or text {PHONE}</a>
+          <a class="btn btn-line" href="#estimate">Get an estimate</a>
+        </div>
+        <p class="rating"><span class="stars" aria-hidden="true">★★★★★</span> 5.0 on Google</p>
+      </div>
+      <figure class="hero-photo">
+        <img src={url('/uploads/brick-fireplace-arch.jpg')} alt="A brick outdoor fireplace with an arched opening, built by Pawling Masonry" width="1050" height="1400">
+        <figcaption>Brick outdoor fireplace</figcaption>
+      </figure>
+    </section>
+
+    <section id="services" class="services">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Services</p>
+          <h2>What we do</h2>
+        </div>
+        <ol class="service-list">
+          {services.map((s, i) => (
+            <li class="service">
+              <div class="service-photo"><img src={url(s.data.photo)} alt={s.data.photoAlt ?? ''} loading="lazy"></div>
+              <div class="service-body">
+                <span class="service-num">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{s.data.title}</h3>
+                <p>{s.data.description}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="rebuild">
+      <div class="wrap rebuild-grid">
+        <div class="rebuild-copy">
+          <p class="eyebrow">Before &amp; after</p>
+          <h2>Chimney tear-down and rebuild</h2>
+          <p>Before: a bare metal flue pipe. After: a red-brick chimney with an arched top.</p>
+        </div>
+        <figure class="ba">
+          <img src={url('/uploads/chimney-before.jpg')} alt="Before: a bare metal flue pipe on the roof" loading="lazy">
+          <figcaption>Before</figcaption>
+        </figure>
+        <figure class="ba">
+          <img src={url('/uploads/chimney-after.jpg')} alt="After: a new red-brick chimney with an arched top on the same house" loading="lazy">
+          <figcaption>After</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="work" class="work">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Recent jobs</p>
+          <h2>Our work</h2>
+        </div>
+        <div class="bond">
+          {gallery.map((g) => (
+            <figure class={`brick ${sizeClass[g.data.size ?? 'normal'] ?? ''}`.trim()}>
+              <img src={url(g.data.photo)} alt={g.data.photoAlt ?? ''} loading="lazy">
+              <figcaption>{g.data.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews" class="reviews">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Reviews</p>
+          <h2>5.0 stars on Google</h2>
+        </div>
+        <div class="quotes">
+          {reviews.map((r) => (
+            <blockquote>
+              <p>&ldquo;{r.data.quote}&rdquo;</p>
+              <cite>{r.data.name}{r.data.job && <> &middot; {r.data.job}</>}</cite>
+            </blockquote>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="estimate" class="estimate">
+      <div class="wrap estimate-grid">
+        <div class="estimate-copy">
+          <p class="eyebrow">Estimates</p>
+          <h2>Text Mark a photo of the job</h2>
+          <p>Fastest way to an estimate: text a picture of what needs work. Or fill out the form.</p>
+          <a class="phone-big" href={TEL}>{PHONE}</a>
+          <p class="contact-line"><a href={SMS}>Send a text</a> &middot; <a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+        </div>
+
+        <form class="estimate-form" id="estimate-form" novalidate>
+          <label>Name
+            <input name="name" type="text" autocomplete="name">
+          </label>
+          <label>Phone or email
+            <input name="contact" type="text" autocomplete="tel">
+          </label>
+          <label>Type of work
+            <select name="kind">
+              {services.map((s) => <option>{s.data.title}</option>)}
+              <option>Something else</option>
+            </select>
+          </label>
+          <label>About the job
+            <textarea name="details" rows="4"></textarea>
+          </label>
+          <button class="btn btn-brick" type="submit">Send to Mark</button>
+          <p class="form-status" id="form-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <img class="footer-logo" src={url('/images/pawlingmasonry.logo-dark.svg')} alt="Pawling Masonry Inc" width="540" height="456" loading="lazy">
+      <div class="footer-info">
+        <p><a href={TEL}>{PHONE}</a> &middot; call or text</p>
+        <p><a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+        <p><a href={FACEBOOK} rel="noopener">Facebook</a></p>
+        <p class="small">&copy; 2026 Pawling Masonry Inc</p>
+        <p class="small demo">Preview site for Pawling Masonry Inc. Not yet the official website.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script is:inline src={url(`/js/main.js?v=${v}`)}></script>
+</body>
+</html>

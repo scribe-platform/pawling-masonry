@@ -1,3 +1,7 @@
 dist/
 .astro/
 node_modules/
+
+# Generated at build time by scripts/generate-config.mjs — never commit.
+/src/content.config.ts
+/src/site-config.ts

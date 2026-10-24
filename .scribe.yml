@@ -1,40 +1,124 @@
 site: pawling-masonry
+siteName: Pawling Masonry Inc
 turnstileSiteKey: 0x4AAAAAAFHtLCWg1S7IznJp
 umamiWebsiteId: 2f96f4b6-71a7-4946-8f6b-2340a6361dd4
 umamiScriptUrl: https://analytics.weaverdigital.io/script.js
 contactCollection: inquiries
 collections:
-  - name: posts
-    label: Posts
-    path: content/posts
-    format: yaml-frontmatter
+  - name: services
+    label: Services
+    path: content/services
+    format: yaml
+    description: The four cards under "What we do" on the homepage.
     view:
       primary: title
-      sort: date
+      sort: order
+      fields: [title, order]
     fields:
       - name: title
+        label: Title
         type: string
         required: true
-      - name: date
-        type: date
+      - name: description
+        label: Description
+        type: text
         required: true
-      - name: heroImage
+      - name: photo
+        label: Photo
         type: image
-      - name: body
-        type: rich-text
-        isBody: true
+        required: true
+      - name: photoAlt
+        label: Photo description (alt text)
+        type: string
+      - name: order
+        label: Order
+        type: number
+        required: true
+
+  - name: gallery
+    label: Our Work
+    path: content/gallery
+    format: yaml
+    description: Job photos in the "Our work" gallery. Normal photos sit three to a row; a narrow one fills half a slot, like a half brick; a wide one runs the full row.
+    view:
+      primary: caption
+      sort: order
+      fields: [caption, size, order]
+    fields:
+      - name: caption
+        label: Caption
+        type: string
+        required: true
+      - name: photo
+        label: Photo
+        type: image
+        required: true
+      - name: photoAlt
+        label: Photo description (alt text)
+        type: string
+      - name: size
+        label: Size
+        type: select
+        options: [normal, narrow, wide]
+        default: normal
+      - name: order
+        label: Order
+        type: number
+        required: true
+
+  - name: reviews
+    label: Reviews
+    path: content/reviews
+    format: yaml
+    description: Customer reviews from Google, shown under "5.0 stars on Google".
+    view:
+      primary: name
+      sort: order
+      fields: [name, job, order]
+    fields:
+      - name: quote
+        label: Quote
+        type: text
+        required: true
+      - name: name
+        label: Name (first name and last initial)
+        type: string
+        required: true
+      - name: job
+        label: Job
+        type: string
+      - name: order
+        label: Order
+        type: number
+        required: true
+
   - name: inquiries
-    label: Inquiries
+    label: Estimate Requests
     path: content/inquiries
     format: yaml
     form: true
+    description: Estimate requests from the website form. (The preview form doesn't send yet.)
+    workflow:
+      states:
+        - { name: new,       label: New,       kind: needs-you }
+        - { name: contacted, label: Contacted, kind: needs-you }
+        - { name: closed,    label: Closed,    kind: closed }
+    notify: []
+    view:
+      fields: [name, contact, kind, status, submittedAt]
+      sort: submittedAt
     fields:
       - name: name
+        label: Name
         type: string
         required: true
-      - name: email
+      - name: contact
+        label: Phone or Email
         type: string
         required: true
+      - name: kind
+        label: Type of work
+        type: string
       - name: message
+        label: About the job
         type: text
-        required: true
