@@ -9,7 +9,7 @@ const gallery = (await getCollection('gallery')).sort(byOrder);
 const reviews = (await getCollection('reviews')).sort(byOrder);
 
 // Bump on every publish so browsers don't keep an old stylesheet or script.
-const v = '1';
+const v = '2';
 const PHONE = '(717) 286-3170';
 const TEL = 'tel:+17172863170';
 const SMS = 'sms:+17172863170';
@@ -24,8 +24,8 @@ const sizeClass: Record<string, string> = { narrow: 'half', wide: 'wide' };
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Preview site: keep out of search results until this becomes the real site -->
   <meta name="robots" content="noindex, nofollow">
-  <title>Pawling Masonry Inc | Chimneys, Stone, Brick and Concrete</title>
-  <meta name="description" content={`Pawling Masonry Inc: chimney repair and rebuilds, stone and brick work, patios, walks and steps. Call or text Mark at ${PHONE}.`}>
+  <title>Pawling Masonry Inc | Masonry and Concrete</title>
+  <meta name="description" content={`Pawling Masonry Inc: stone, brick and block work, concrete walks, steps and patios, and chimney repair. Licensed in PA. Free estimates. Call or text Mark at ${PHONE}.`}>
   <link rel="icon" type="image/png" href={url('/images/pawlingmasonry.icon.png')}>
   <link rel="apple-touch-icon" href={url('/images/pawlingmasonry.icon.png')}>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,12 +55,12 @@ const sizeClass: Record<string, string> = { narrow: 'half', wide: 'wide' };
 
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Masonry &amp; concrete contractor</p>
-        <h1>Chimneys. Stone. Brick. Concrete.</h1>
-        <p class="lede">Chimney repair and rebuilds, stone and brick work, patios, walks and steps. Call or text Mark for an estimate.</p>
+        <p class="eyebrow">Licensed in PA &middot; Free estimates</p>
+        <h1>Masonry &amp; Concrete</h1>
+        <p class="lede">Stone, brick and block work. Concrete walks, steps and patios. Chimney repair and rebuilds. Call or text Mark for a free estimate.</p>
         <div class="hero-actions">
           <a class="btn btn-brick" href={TEL}>Call or text {PHONE}</a>
-          <a class="btn btn-line" href="#estimate">Get an estimate</a>
+          <a class="btn btn-line" href="#estimate">Get a free estimate</a>
         </div>
         <p class="rating"><span class="stars" aria-hidden="true">★★★★★</span> 5.0 on Google</p>
       </div>
@@ -146,9 +146,9 @@ const sizeClass: Record<string, string> = { narrow: 'half', wide: 'wide' };
     <section id="estimate" class="estimate">
       <div class="wrap estimate-grid">
         <div class="estimate-copy">
-          <p class="eyebrow">Estimates</p>
+          <p class="eyebrow">Free estimates</p>
           <h2>Text Mark a photo of the job</h2>
-          <p>Fastest way to an estimate: text a picture of what needs work. Or fill out the form.</p>
+          <p>Fastest way to a free estimate: text a picture of what needs work. Or fill out the form.</p>
           <a class="phone-big" href={TEL}>{PHONE}</a>
           <p class="contact-line"><a href={SMS}>Send a text</a> &middot; <a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
         </div>
