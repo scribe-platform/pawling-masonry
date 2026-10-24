@@ -1,0 +1,20 @@
+{
+  "name": "pawling-masonry",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^7.3.3"
+  },
+  "devDependencies": {
+    "yaml": "^2.6.0"
+  }
+}
