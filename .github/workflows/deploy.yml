@@ -1,0 +1,57 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Required. Scribe dispatches this when an editor publishes in the admin;
+  # without it the publish reports success and the site never updates.
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+      - run: npm install
+
+      # A bare github.io project page serves from /<repo>/; a custom domain
+      # serves from the root. Deciding it here means a domain going live needs
+      # no code change.
+      - name: Compute Pages base path
+        id: base
+        run: |
+          if [ -f public/CNAME ]; then
+            echo "path=/" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=/${{ github.event.repository.name }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - run: npm run build
+        env:
+          PUBLIC_SCRIBE_API_URL: ${{ vars.PUBLIC_SCRIBE_API_URL }}
+          PUBLIC_BASE_PATH: ${{ steps.base.outputs.path }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
