@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { UMAMI_SCRIPT_URL, UMAMI_WEBSITE_ID } from '../site-config';
+import { CONTACT_COLLECTION, SITE_SLUG, TURNSTILE_SITE_KEY, UMAMI_SCRIPT_URL, UMAMI_WEBSITE_ID } from '../site-config';
 import { url } from '../lib/base';
 
 const byOrder = (a: any, b: any) => (a.data.order ?? 0) - (b.data.order ?? 0);
@@ -9,13 +9,14 @@ const gallery = (await getCollection('gallery')).sort(byOrder);
 const reviews = (await getCollection('reviews')).sort(byOrder);
 
 // Bump on every publish so browsers don't keep an old stylesheet or script.
-const v = '3';
+const v = '4';
 const PHONE = '(717) 286-3170';
 const TEL = 'tel:+17172863170';
 const SMS = 'sms:+17172863170';
 const EMAIL = 'markdpawling@gmail.com';
 const FACEBOOK = 'https://www.facebook.com/people/Pawling-masonry-inc/100064440384288/';
 const sizeClass: Record<string, string> = { narrow: 'half', wide: 'wide' };
+const SCRIBE_API = import.meta.env.PUBLIC_SCRIBE_API_URL || 'https://scribe.weaverdigital.io';
 ---
 <!doctype html>
 <html lang="en">
@@ -153,7 +154,7 @@ const sizeClass: Record<string, string> = { narrow: 'half', wide: 'wide' };
           <p class="contact-line"><a href={SMS}>Send a text</a> &middot; <a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
         </div>
 
-        <form class="estimate-form" id="estimate-form" novalidate>
+        <form class="estimate-form" id="estimate-form" novalidate data-site={SITE_SLUG} data-collection={CONTACT_COLLECTION} data-endpoint={`${SCRIBE_API}/api/submissions`} data-scribe-retry>
           <label>Name
             <input name="name" type="text" autocomplete="name">
           </label>
@@ -167,8 +168,9 @@ const sizeClass: Record<string, string> = { narrow: 'half', wide: 'wide' };
             </select>
           </label>
           <label>About the job
-            <textarea name="details" rows="4"></textarea>
+            <textarea name="message" rows="4"></textarea>
           </label>
+          <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY}></div>
           <button class="btn btn-brick" type="submit">Send to Mark</button>
           <p class="form-status" id="form-status" role="status"></p>
         </form>
@@ -190,6 +192,7 @@ const sizeClass: Record<string, string> = { narrow: 'half', wide: 'wide' };
     </div>
   </footer>
 
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script is:inline src={url(`/js/main.js?v=${v}`)}></script>
 </body>
 </html>
