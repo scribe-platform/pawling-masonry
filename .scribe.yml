@@ -7,105 +7,175 @@ contactCollection: inquiries
 collections:
   - name: services
     label: Services
+    description: The four cards under "What we do" on the homepage.
     path: content/services
     format: yaml
-    description: The four cards under "What we do" on the homepage.
     view:
       primary: title
       sort: order
-      fields: [title, order]
+      fields:
+        - title
+        - order
     fields:
       - name: title
+        type: string
         label: Title
-        type: string
         required: true
+        hidden: false
+        readonly: false
+        isBody: false
       - name: description
-        label: Description
         type: text
+        label: Description
         required: true
+        hidden: false
+        readonly: false
+        isBody: false
       - name: photo
-        label: Photo
         type: image
+        label: Photo
         required: true
+        hidden: false
+        readonly: false
+        isBody: false
       - name: photoAlt
-        label: Photo description (alt text)
         type: string
+        label: Photo description (alt text)
+        required: false
+        hidden: false
+        readonly: false
+        isBody: false
       - name: order
-        label: Order
         type: number
+        label: Order
         required: true
-
+        hidden: false
+        readonly: false
+        isBody: false
+    form: false
   - name: gallery
     label: Our Work
+    description: Job photos in the "Our work" gallery. Normal photos sit three to a
+      row; a narrow one fills half a slot, like a half brick; a wide one runs
+      the full row.
     path: content/gallery
     format: yaml
-    description: Job photos in the "Our work" gallery. Normal photos sit three to a row; a narrow one fills half a slot, like a half brick; a wide one runs the full row.
     view:
       primary: caption
       sort: order
-      fields: [caption, size, order]
+      fields:
+        - caption
+        - size
+        - order
     fields:
       - name: caption
+        type: string
         label: Caption
-        type: string
         required: true
+        hidden: false
+        readonly: false
+        isBody: false
       - name: photo
-        label: Photo
         type: image
+        label: Photo
         required: true
+        hidden: false
+        readonly: false
+        isBody: false
       - name: photoAlt
-        label: Photo description (alt text)
         type: string
+        label: Photo description (alt text)
+        required: false
+        hidden: false
+        readonly: false
+        isBody: false
       - name: size
-        label: Size
         type: select
-        options: [normal, narrow, wide]
+        label: Size
+        required: false
         default: normal
+        hidden: false
+        readonly: false
+        isBody: false
+        options:
+          - normal
+          - narrow
+          - wide
       - name: order
-        label: Order
         type: number
+        label: Order
         required: true
-
+        hidden: false
+        readonly: false
+        isBody: false
+    form: false
   - name: reviews
     label: Reviews
+    description: Customer reviews from Google, shown under "5.0 stars on Google".
     path: content/reviews
     format: yaml
-    description: Customer reviews from Google, shown under "5.0 stars on Google".
     view:
       primary: name
       sort: order
-      fields: [name, job, order]
+      fields:
+        - name
+        - job
+        - order
     fields:
       - name: quote
-        label: Quote
         type: text
+        label: Quote
         required: true
+        hidden: false
+        readonly: false
+        isBody: false
       - name: name
+        type: string
         label: Name (first name and last initial)
-        type: string
         required: true
+        hidden: false
+        readonly: false
+        isBody: false
       - name: job
-        label: Job
         type: string
+        label: Job
+        required: false
+        hidden: false
+        readonly: false
+        isBody: false
       - name: order
-        label: Order
         type: number
+        label: Order
         required: true
-
+        hidden: false
+        readonly: false
+        isBody: false
+    form: false
   - name: inquiries
     label: Estimate Requests
     path: content/inquiries
     format: yaml
     form: true
-    description: Estimate requests from the website form. (The preview form doesn't send yet.)
+    description: Estimate requests from the website form.
     workflow:
       states:
-        - { name: new,       label: New,       kind: needs-you }
-        - { name: contacted, label: Contacted, kind: needs-you }
-        - { name: closed,    label: Closed,    kind: closed }
+        - name: new
+          label: New
+          kind: needs-you
+        - name: contacted
+          label: Contacted
+          kind: needs-you
+        - name: closed
+          label: Closed
+          kind: closed
     notify: []
     view:
-      fields: [name, contact, kind, status, submittedAt]
+      fields:
+        - name
+        - contact
+        - kind
+        - status
+        - submittedAt
       sort: submittedAt
     fields:
       - name: name
