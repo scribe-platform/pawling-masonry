@@ -1,4 +1,5 @@
 site: pawling-masonry
+environment: production
 siteName: Pawling Masonry Inc
 turnstileSiteKey: 0x4AAAAAAFHtLCWg1S7IznJp
 umamiWebsiteId: 2f96f4b6-71a7-4946-8f6b-2340a6361dd4
