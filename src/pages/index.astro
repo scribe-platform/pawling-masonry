@@ -16,7 +16,33 @@ const SMS = 'sms:+17172863170';
 const EMAIL = 'markdpawling@gmail.com';
 const FACEBOOK = 'https://www.facebook.com/people/Pawling-masonry-inc/100064440384288/';
 const sizeClass: Record<string, string> = { narrow: 'half', wide: 'wide' };
-const SCRIBE_API = import.meta.env.PUBLIC_SCRIBE_API_URL || 'https://scribe.weaverdigital.io';
+// Where this Site's forms post. `PUBLIC_SCRIBE_API_URL` is an **organisation**
+// variable on the GitHub org that owns this repo, passed to the build by
+// `deploy.yml`, and it has **no default in a production build** (RFC 0025).
+//
+// It used to fall back to the production admin, which is the failure that rule
+// exists to end: a `PUBLIC_*` value is inlined into the client bundle at build
+// time, so a Site that guessed shipped the wrong endpoint and posted a Visitor's
+// message to whichever Scribe the fallback named — noticed, if ever, by a Client
+// wondering why nobody replied. Failing the build is the cheap version of that.
+//
+// GitHub resolves an unset `vars.*` to an empty string rather than leaving it
+// undefined, so empty has to count as missing. Dev falls back to a *local*
+// admin, never production, so `npm run dev` needs no env file and still cannot
+// write to a real Client's database by omission.
+function scribeApiBase(): string {
+  const configured = import.meta.env.PUBLIC_SCRIBE_API_URL?.trim();
+  if (configured) return configured;
+  if (import.meta.env.PROD) {
+    throw new Error(
+      'PUBLIC_SCRIBE_API_URL is unset. Set it as an organisation variable on the GitHub org that owns ' +
+        'this repo — it has no default in a production build, so this Site posts nowhere by accident.',
+    );
+  }
+  return 'http://localhost:3040';
+}
+
+const SCRIBE_API = scribeApiBase();
 ---
 <!doctype html>
 <html lang="en">
