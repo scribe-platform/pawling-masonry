@@ -237,7 +237,6 @@ h3 { font-size: 1.7rem; font-weight: 700; line-height: 1; }
 .footer-info p { margin: 0 0 6px; }
 .footer-info a { color: #fff; }
 .footer-info .small { font-size: 0.85rem; color: #9DA4A7; }
-.footer-info .demo { margin-top: 14px; }
 
 /* Tablet */
 @media (max-width: 960px) {
