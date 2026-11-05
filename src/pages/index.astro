@@ -9,12 +9,16 @@ const gallery = (await getCollection('gallery')).sort(byOrder);
 const reviews = (await getCollection('reviews')).sort(byOrder);
 
 // Bump on every publish so browsers don't keep an old stylesheet or script.
-const v = '7';
+const v = '8';
 const PHONE = '(717) 286-3170';
 const TEL = 'tel:+17172863170';
 const SMS = 'sms:+17172863170';
 const EMAIL = 'markdpawling@gmail.com';
 const FACEBOOK = 'https://www.facebook.com/people/Pawling-masonry-inc/100064440384288/';
+// Mark's Google Business Profile, by its permanent CID rather than the
+// share.google short link it came from — a redirector is one retirement away
+// from being a dead link, and this one is the listing's own id.
+const GOOGLE_PROFILE = 'https://maps.google.com/?cid=12162634381602271849';
 const sizeClass: Record<string, string> = { narrow: 'half', wide: 'wide' };
 // Where this Site's forms post. `PUBLIC_SCRIBE_API_URL` is an **organisation**
 // variable on the GitHub org that owns this repo, passed to the build by
@@ -96,7 +100,11 @@ const business = {
     { '@type': 'AdministrativeArea', name: 'Harford County, MD' },
     { '@type': 'AdministrativeArea', name: 'Southern Pennsylvania' },
   ],
-  sameAs: [FACEBOOK],
+  // The Google Business Profile first: it is what ties this domain to the
+  // listing holding the reviews, hours and address, rather than leaving
+  // Google to infer the link from a matching name and phone number.
+  sameAs: [GOOGLE_PROFILE, FACEBOOK],
+  geo: { '@type': 'GeoCoordinates', latitude: 39.663785, longitude: -76.363741 },
 };
 ---
 <!doctype html>
@@ -225,7 +233,8 @@ const business = {
       <div class="wrap">
         <div class="section-head">
           <p class="eyebrow">Reviews</p>
-          <h2>5.0 stars on Google</h2>
+          <h2><a class="reviews-link" href={GOOGLE_PROFILE} rel="noopener">5.0 stars on Google</a></h2>
+          <p class="reviews-more"><a href={GOOGLE_PROFILE} rel="noopener">Read them all on Google &rarr;</a></p>
         </div>
         <div class="quotes">
           {reviews.map((r) => (

@@ -179,6 +179,13 @@ h3 { font-size: 1.7rem; font-weight: 700; line-height: 1; }
 /* Reviews */
 .reviews { padding: 96px 0; background: var(--black); color: #fff; }
 .reviews .eyebrow { color: #E07A57; }
+/* The heading is the link to the listing, so the live rating and the rest of
+   the reviews are one click away and nothing here has to be kept current. */
+.reviews-link { color: inherit; text-decoration: none; }
+.reviews-link:hover { color: var(--brick); }
+.reviews-more { margin: 16px 0 0; font-size: 1rem; }
+.reviews-more a { color: #E07A57; text-decoration: none; font-weight: 600; }
+.reviews-more a:hover { text-decoration: underline; }
 .quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .quotes blockquote {
   margin: 0;
