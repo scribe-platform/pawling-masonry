@@ -70,7 +70,11 @@ const OG_DESCRIPTION = `Stone, brick and block work, concrete walks, steps and p
 // site penalised.
 const business = {
   '@context': 'https://schema.org',
-  '@type': 'GeneralContractor',
+  // Both, rather than just `GeneralContractor`. The specific type is what
+  // tells Google what trade this is; `LocalBusiness` is its parent and is
+  // what `scribe site seo` matches on, which today is an exact match against
+  // two names rather than the subtype tree.
+  '@type': ['GeneralContractor', 'LocalBusiness'],
   name: 'Pawling Masonry Inc',
   description: 'Stone, brick and block work, concrete walks, steps and patios, and chimney repair and rebuilds.',
   url: 'https://pawlingmasonry.com',
