@@ -9,7 +9,7 @@ const gallery = (await getCollection('gallery')).sort(byOrder);
 const reviews = (await getCollection('reviews')).sort(byOrder);
 
 // Bump on every publish so browsers don't keep an old stylesheet or script.
-const v = '6';
+const v = '7';
 const PHONE = '(717) 286-3170';
 const TEL = 'tel:+17172863170';
 const SMS = 'sms:+17172863170';
@@ -43,6 +43,57 @@ function scribeApiBase(): string {
 }
 
 const SCRIBE_API = scribeApiBase();
+
+// Mark's Google Business Profile address. It must match the profile exactly —
+// a business whose site and listing disagree about where it is ranks worse
+// than one that names no address at all.
+const ADDRESS = { street: '3688 Emory Church Rd', city: 'Street', state: 'MD', zip: '21154' };
+
+// Astro.url.pathname carries the base path; Astro.site is the live domain,
+// where the Site is served from the root. Strip the base so the two never
+// compose into a canonical URL that does not exist.
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path =
+  (basePath && Astro.url.pathname.startsWith(basePath)
+    ? Astro.url.pathname.slice(basePath.length)
+    : Astro.url.pathname) || '/';
+const canonical = new URL(path, Astro.site);
+const cardImage = new URL('/og-card.jpg', Astro.site);
+
+const OG_TITLE = 'Pawling Masonry Inc \u2014 Masonry and concrete in northern Maryland and southern PA';
+const OG_DESCRIPTION = `Stone, brick and block work, concrete walks, steps and patios, and chimney repair. Licensed in PA, free estimates. Call or text Mark at ${PHONE}.`;
+
+// What a search engine reads to decide this is a real business in a real
+// place, rather than a page about one. The reviews on this page are
+// deliberately *not* marked up: Google reserves review markup for a site
+// reviewing other businesses, and self-serving review markup is what gets a
+// site penalised.
+const business = {
+  '@context': 'https://schema.org',
+  '@type': 'GeneralContractor',
+  name: 'Pawling Masonry Inc',
+  description: 'Stone, brick and block work, concrete walks, steps and patios, and chimney repair and rebuilds.',
+  url: 'https://pawlingmasonry.com',
+  telephone: TEL.replace('tel:', ''),
+  email: EMAIL,
+  image: cardImage.href,
+  logo: new URL('/images/pawlingmasonry.logo-dark.svg', Astro.site).href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: ADDRESS.street,
+    addressLocality: ADDRESS.city,
+    addressRegion: ADDRESS.state,
+    postalCode: ADDRESS.zip,
+    addressCountry: 'US',
+  },
+  // The yard is in Harford County, MD; the phone is a 717 number and the page
+  // says "Licensed in PA". Both sides of the line, then, rather than one.
+  areaServed: [
+    { '@type': 'AdministrativeArea', name: 'Harford County, MD' },
+    { '@type': 'AdministrativeArea', name: 'Southern Pennsylvania' },
+  ],
+  sameAs: [FACEBOOK],
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -50,7 +101,22 @@ const SCRIBE_API = scribeApiBase();
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pawling Masonry Inc | Masonry and Concrete</title>
-  <meta name="description" content={`Pawling Masonry Inc: stone, brick and block work, concrete walks, steps and patios, and chimney repair. Licensed in PA. Free estimates. Call or text Mark at ${PHONE}.`}>
+  <meta name="description" content={OG_DESCRIPTION}>
+  <link rel="canonical" href={canonical}>
+
+  <meta property="og:site_name" content="Pawling Masonry Inc">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content={OG_TITLE}>
+  <meta property="og:description" content={OG_DESCRIPTION}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content={cardImage}>
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={OG_TITLE}>
+  <meta name="twitter:description" content={OG_DESCRIPTION}>
+  <meta name="twitter:image" content={cardImage}>
+
+  <script type="application/ld+json" set:html={JSON.stringify(business)} is:inline />
   <link rel="icon" type="image/png" href={url('/images/pawlingmasonry.icon.png')}>
   <link rel="apple-touch-icon" href={url('/images/pawlingmasonry.icon.png')}>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -210,6 +276,7 @@ const SCRIBE_API = scribeApiBase();
         <p><a href={TEL}>{PHONE}</a> &middot; call or text</p>
         <p><a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
         <p><a href={FACEBOOK} rel="noopener">Facebook</a></p>
+        <p class="address">{ADDRESS.street}<br>{ADDRESS.city}, {ADDRESS.state} {ADDRESS.zip}</p>
         <p class="small">&copy; 2026 Pawling Masonry Inc</p>
       </div>
     </div>

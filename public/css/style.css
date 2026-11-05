@@ -236,6 +236,7 @@ h3 { font-size: 1.7rem; font-weight: 700; line-height: 1; }
 .footer-logo { width: 180px; height: auto; }
 .footer-info p { margin: 0 0 6px; }
 .footer-info a { color: #fff; }
+.footer-info .address { font-style: normal; color: #D3C8B5; line-height: 1.4; margin-top: 12px; }
 .footer-info .small { font-size: 0.85rem; color: #9DA4A7; }
 
 /* Tablet */
